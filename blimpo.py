@@ -12,8 +12,9 @@ app.secret_key=urandom(32)
 @app.route('/')
 def root():
     #render loggedIn page if session has "user":"Bob"
-    if (len(session)==1 and session["user"]=="Bob"):
-        return redirect(url_for("welcome"))
+    if 'user' in session:
+		if session['user']=='Bob':
+			return redirect(url_for("welcome"))
     #otherwise, render login page
     else:
         return redirect(url_for("login"))
@@ -31,7 +32,8 @@ def entry():
 @app.route("/logOff", methods=["GET", "POST"])
 def logOff():
     #if logoff button is hit, remove session, and render logoff page
-    session.pop("user")
+    if 'user' in session:
+        session.pop('user')
     return redirect(url_for("login"))
         
 
