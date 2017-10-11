@@ -1,5 +1,5 @@
 from os import urandom
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for, flash
 
 #set default user/password for testing
 defaultUser = "Bob"
@@ -27,7 +27,11 @@ def entry():
         return redirect(url_for("welcome"))
     #otherwise if username/password combo is wrong, render error page
     else:
-        return redirect(url_for("error"))
+		if request.form["username"]!="Bob":
+			flash("Wrong user")
+		if request.form["password"]!="123":
+			flash("Wrong password")
+		return redirect(url_for("login"))
 
 @app.route("/logOff", methods=["GET", "POST"])
 def logOff():
@@ -45,9 +49,7 @@ def welcome():
 def login():
     return render_template("login.html")
     
-@app.route('/error')
-def error():
-    return render_template("error.html")
+
 
 if __name__ == '__main__':
     app.debug==True
